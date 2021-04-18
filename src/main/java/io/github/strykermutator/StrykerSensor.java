@@ -6,13 +6,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
-import org.sonar.api.config.Settings;
-import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.rule.RuleKey;
 
 import java.io.File;
@@ -23,19 +22,15 @@ import java.util.Optional;
 
 import static io.github.strykermutator.StrykerConstants.*;
 
-/**
- *
- */
 @Slf4j
 public class StrykerSensor implements Sensor {
     private final FileSystem fileSystem;
-    private final RulesProfile rulesProfile;
-    private final Settings settings;
+    private final ActiveRules activeRules;
 
-    public StrykerSensor(Settings settings, FileSystem fileSystem, RulesProfile rulesProfile) {
+
+    public StrykerSensor(FileSystem fileSystem, ActiveRules activeRules) {
         this.fileSystem = fileSystem;
-        this.rulesProfile = rulesProfile;
-        this.settings = settings;
+        this.activeRules = activeRules;
     }
 
     @Override
@@ -44,7 +39,7 @@ public class StrykerSensor implements Sensor {
     }
 
     private boolean isRuleActive(String ruleKey) {
-        return rulesProfile.getActiveRule(RULE_REPOSITORY_KEY, ruleKey) != null;
+        return activeRules.find(RuleKey.of(RULE_REPOSITORY_KEY, ruleKey)) != null;
     }
 
     @Override
@@ -53,7 +48,7 @@ public class StrykerSensor implements Sensor {
         List<String> rules = Arrays.asList(SURVIVED_MUTANT_RULE_KEY, NO_COVERAGE_MUTANT_RULE_KEY);
         if (rules.stream().anyMatch(this::isRuleActive)) {
             try {
-                StrykerEventsDirectory strykerEvents = new StrykerEventsDirectory(settings, fileSystem);
+                StrykerEventsDirectory strykerEvents = new StrykerEventsDirectory(context, fileSystem);
                 MutantResultJsonReader reader = new MutantResultJsonReader();
                 Optional<String> allMutantTestedEventFileContent = strykerEvents.readOnAllMutantsTestedFile();
                 if (allMutantTestedEventFileContent.isPresent()) {
@@ -84,15 +79,16 @@ public class StrykerSensor implements Sensor {
             for (MutantResult mutantResult : mutantResults) {
                 if (mutantResult.getStatus() == targetStatus) {
                     count++;
-                    InputFile file = locateSourceFile(mutantResult.getSourceFilePath());
+                    InputFile inputFile = locateSourceFile(mutantResult.getFileName());
 
-                    NewIssue issue = context.newIssue();
+                    NewIssue issue = context.newIssue()
+                            .forRule(RuleKey.of(RULE_REPOSITORY_KEY, ruleKey));
+
                     NewIssueLocation location = issue.newLocation()
-                            .on(file)
-                            .at(mutantResult.getLocation().getRange(file))
+                            .on(inputFile)
+                            .at(mutantResult.getLocation().getRange(inputFile))
                             .message(formatIssueMessage(mutantResult));
                     issue.at(location);
-                    issue.forRule(RuleKey.of(RULE_REPOSITORY_KEY, ruleKey));
                     issue.save();
                 }
             }

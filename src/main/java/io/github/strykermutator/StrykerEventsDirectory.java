@@ -2,27 +2,27 @@ package io.github.strykermutator;
 
 import lombok.extern.slf4j.Slf4j;
 import org.sonar.api.batch.fs.FileSystem;
-import org.sonar.api.config.Settings;
+import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.api.internal.apachecommons.io.FileUtils;
 
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Optional;
 
 import static io.github.strykermutator.StrykerConstants.DEFAULT_REPORT_DIRECTORY;
 import static io.github.strykermutator.StrykerConstants.REPORT_DIRECTORY_KEY;
 
+
 @Slf4j
 public class StrykerEventsDirectory {
 
     public static final String ON_ALL_MUTANTS_TESTED_FILE_NAME = "onAllMutantsTested";
-    private File reportDirectory;
+    private final File reportDirectory;
 
-    StrykerEventsDirectory(Settings settings, FileSystem fs) {
-        reportDirectory = new java.io.File(fs.baseDir(),
-                Optional.ofNullable(settings.getString(REPORT_DIRECTORY_KEY)).orElse(DEFAULT_REPORT_DIRECTORY));
+    StrykerEventsDirectory(SensorContext context, FileSystem fs) {
+        Optional<String> projectReportDirectory= context.config().get(REPORT_DIRECTORY_KEY);
+        reportDirectory = new java.io.File(fs.baseDir(), projectReportDirectory.orElse(DEFAULT_REPORT_DIRECTORY));
     }
 
     Optional<String> readOnAllMutantsTestedFile() throws IOException {
@@ -32,7 +32,7 @@ public class StrykerEventsDirectory {
                 if (onAllMutantsTestedFiles != null && onAllMutantsTestedFiles.length == 1) {
                     if (onAllMutantsTestedFiles[0].isFile()) {
                         log.info("Reading onAllMutantsTested result file {}", onAllMutantsTestedFiles[0].getPath());
-                        return Optional.of(new String(Files.readAllBytes(Paths.get(onAllMutantsTestedFiles[0].getPath()))));
+                        return Optional.of( new String(FileUtils.readFileToByteArray(onAllMutantsTestedFiles[0])));
                     }else {
                         log.info("File {} is not a file (it's a directory)", onAllMutantsTestedFiles[0].getAbsolutePath());
                     }

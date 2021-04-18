@@ -10,6 +10,6 @@ public class Location {
     private Position end;
 
     public TextRange getRange(InputFile file) {
-        return file.newRange(getStart().getTextPointer(), getEnd().getTextPointer());
+        return file.newRange(getStart().getLine(),getStart().getColumn(),getEnd().getLine(),getEnd().getColumn());
     }
 }
