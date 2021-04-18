@@ -1,9 +1,9 @@
 package io.github.strykermutator;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.api.internal.apachecommons.io.FileUtils;
 
 import java.io.File;
 import java.io.FilenameFilter;
