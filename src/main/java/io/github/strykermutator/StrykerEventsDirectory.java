@@ -1,5 +1,6 @@
 package io.github.strykermutator;
 
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.sonar.api.batch.fs.FileSystem;
@@ -21,31 +22,38 @@ public class StrykerEventsDirectory {
     private final File reportDirectory;
 
     StrykerEventsDirectory(SensorContext context, FileSystem fs) {
-        Optional<String> projectReportDirectory= context.config().get(REPORT_DIRECTORY_KEY);
+        Optional<String> projectReportDirectory = context.config().get(REPORT_DIRECTORY_KEY);
         reportDirectory = new java.io.File(fs.baseDir(), projectReportDirectory.orElse(DEFAULT_REPORT_DIRECTORY));
     }
 
-    Optional<String> readOnAllMutantsTestedFile() throws IOException {
-        if (reportDirectory.exists()) {
-            if (reportDirectory.isDirectory()) {
-                File[] onAllMutantsTestedFiles = reportDirectory.listFiles(filter(ON_ALL_MUTANTS_TESTED_FILE_NAME));
-                if (onAllMutantsTestedFiles != null && onAllMutantsTestedFiles.length == 1) {
-                    if (onAllMutantsTestedFiles[0].isFile()) {
-                        log.info("Reading onAllMutantsTested result file {}", onAllMutantsTestedFiles[0].getPath());
-                        return Optional.of( new String(FileUtils.readFileToByteArray(onAllMutantsTestedFiles[0])));
-                    }else {
-                        log.info("File {} is not a file (it's a directory)", onAllMutantsTestedFiles[0].getAbsolutePath());
-                    }
-                }else {
-                    log.info("Could not find a file with '{}' in the name in directory {}", ON_ALL_MUTANTS_TESTED_FILE_NAME, reportDirectory.getAbsolutePath());
-                }
-            }else {
-                log.info("Report directory {} is not a directory (it's a file).", reportDirectory.getAbsolutePath());
-            }
-        }else {
-            log.info("Report directory {} does not exist.", reportDirectory.getAbsolutePath());
+    Optional<String> readReportFileAsByteString() throws IOException {
+
+        validateDirectory();
+
+        File reportFile = getReportFile();
+        return Optional.of(new String(FileUtils.readFileToByteArray(reportFile)));
+    }
+
+    private void validateDirectory() throws IOException {
+        if (!reportDirectory.exists() || !reportDirectory.isDirectory()) {
+            throw new IOException(String.format("Report directory %s does not exist or it's not a directory (it's a file)",
+                    reportDirectory.getAbsolutePath()));
         }
-        return Optional.empty();
+    }
+
+    private File getReportFile() throws IOException {
+        File[] onAllMutantsTestedFiles = reportDirectory.listFiles(filter(ON_ALL_MUTANTS_TESTED_FILE_NAME));
+
+        if (onAllMutantsTestedFiles == null || onAllMutantsTestedFiles.length != 1) {
+            throw new IOException(String.format("Could not find a file with '%s' in the name in directory %s",
+                    ON_ALL_MUTANTS_TESTED_FILE_NAME, reportDirectory.getAbsolutePath()));
+        }
+
+        if (!onAllMutantsTestedFiles[0].isFile()) {
+            throw new IOException(String.format("File %s is not a file (it's a directory)",
+                    onAllMutantsTestedFiles[0].getAbsolutePath()));
+        }
+        return onAllMutantsTestedFiles[0];
     }
 
     private FilenameFilter filter(String fileName) {

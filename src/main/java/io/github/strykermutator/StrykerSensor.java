@@ -38,32 +38,40 @@ public class StrykerSensor implements Sensor {
         descriptor.name("Stryker Mutation testing Sensor");
     }
 
+
+    @Override
+    public void execute(SensorContext context) {
+
+        if (checkIfNecessaryRulesActive()) return;
+        try {
+            analyzeReportAndCreateIssues(context);
+        } catch (IOException e) {
+            log.error("Could not read from Stryker event file.", e);
+        } catch (RuntimeException runTimeEx) {
+            log.error("Something went wrong.", runTimeEx);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private boolean checkIfNecessaryRulesActive() {
+        List<String> rules = Arrays.asList(SURVIVED_MUTANT_RULE_KEY, NO_COVERAGE_MUTANT_RULE_KEY);
+        return rules.stream().noneMatch(this::isRuleActive);
+    }
+
     private boolean isRuleActive(String ruleKey) {
         return activeRules.find(RuleKey.of(RULE_REPOSITORY_KEY, ruleKey)) != null;
     }
 
-    @Override
-    public void execute(SensorContext context) {
-        //check if rule is active
-        List<String> rules = Arrays.asList(SURVIVED_MUTANT_RULE_KEY, NO_COVERAGE_MUTANT_RULE_KEY);
-        if (rules.stream().anyMatch(this::isRuleActive)) {
-            try {
-                StrykerEventsDirectory strykerEvents = new StrykerEventsDirectory(context, fileSystem);
-                MutantResultJsonReader reader = new MutantResultJsonReader();
-                Optional<String> allMutantTestedEventFileContent = strykerEvents.readOnAllMutantsTestedFile();
-                if (allMutantTestedEventFileContent.isPresent()) {
-                    List<MutantResult> mutantResults = reader.readMutants(allMutantTestedEventFileContent.get());
-                    createIssues(mutantResults, context);
-                } else {
-                    log.warn("Could not find stryker report, not reporting issues.");
-                }
-            } catch (IOException e) {
-                log.error("Could not read from Stryker event file.", e);
-            } catch (RuntimeException runTimeEx) {
-                log.error("Something went wrong.", runTimeEx);
-            }
+    private void analyzeReportAndCreateIssues(SensorContext context) throws IOException {
+        StrykerEventsDirectory strykerEvents = new StrykerEventsDirectory(context, fileSystem);
+        MutantResultJsonReader reader = new MutantResultJsonReader();
+        Optional<String> reportFile = strykerEvents.readReportFileAsByteString();
+        if (reportFile.isPresent()) {
+            List<MutantResult> mutantResults = reader.readMutants(reportFile.get());
+            createIssues(mutantResults, context);
         } else {
-            log.info("Rules {} were not active, cannot create issues.", rules);
+            log.warn("Could not find stryker report, not reporting issues.");
         }
     }
 
@@ -74,28 +82,24 @@ public class StrykerSensor implements Sensor {
     }
 
     private void createIssuesForMutants(List<MutantResult> mutantResults, SensorContext context, MutantStatus targetStatus, String ruleKey) throws IOException {
-        if (isRuleActive(ruleKey)) {
-            int count = 0;
-            for (MutantResult mutantResult : mutantResults) {
-                if (mutantResult.getStatus() == targetStatus) {
-                    count++;
-                    InputFile inputFile = locateSourceFile(mutantResult.getFileName());
+        int count = 0;
+        for (MutantResult mutantResult : mutantResults) {
+            if (mutantResult.getStatus() == targetStatus) {
+                count++;
+                InputFile inputFile = locateSourceFile(mutantResult.getFileName());
 
-                    NewIssue issue = context.newIssue()
-                            .forRule(RuleKey.of(RULE_REPOSITORY_KEY, ruleKey));
+                NewIssue issue = context.newIssue()
+                        .forRule(RuleKey.of(RULE_REPOSITORY_KEY, ruleKey));
 
-                    NewIssueLocation location = issue.newLocation()
-                            .on(inputFile)
-                            .at(mutantResult.getLocation().getRange(inputFile))
-                            .message(formatIssueMessage(mutantResult));
-                    issue.at(location);
-                    issue.save();
-                }
+                NewIssueLocation location = issue.newLocation()
+                        .on(inputFile)
+                        .at(mutantResult.getLocation().getRange(inputFile))
+                        .message(formatIssueMessage(mutantResult));
+                issue.at(location);
+                issue.save();
             }
-            log.info("Reported {} issue(s) as {}.", count, targetStatus);
-        } else {
-            log.info("Skip reporting {} mutant(s), because rule {} is inactive", targetStatus, ruleKey);
         }
+        log.info("Reported {} issue(s) as {}.", count, targetStatus);
     }
 
     private String formatIssueMessage(MutantResult mutantResult) {
