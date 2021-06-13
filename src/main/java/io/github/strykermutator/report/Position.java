@@ -4,7 +4,14 @@ import lombok.Value;
 
 @Value
 public class Position {
-    private int line;
-    private int column;
+    int line;
+    int column;
 
+    public int getLinePointer() {
+        return this.line;
+    }
+
+    public int getColumnPointer() {
+        return this.column - 1;
+    }
 }

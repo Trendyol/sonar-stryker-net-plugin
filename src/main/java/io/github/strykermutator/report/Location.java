@@ -6,10 +6,10 @@ import org.sonar.api.batch.fs.TextRange;
 
 @Value
 public class Location {
-    private Position start;
-    private Position end;
+    Position start;
+    Position end;
 
     public TextRange getRange(InputFile file) {
-        return file.newRange(getStart().getLine(),getStart().getColumn(),getEnd().getLine(),getEnd().getColumn());
+        return file.newRange(getStart().getLinePointer(), getStart().getColumnPointer(), getEnd().getLinePointer(), getEnd().getColumnPointer());
     }
 }

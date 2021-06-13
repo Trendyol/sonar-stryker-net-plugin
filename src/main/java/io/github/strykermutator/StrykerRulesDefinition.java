@@ -32,11 +32,11 @@ public class StrykerRulesDefinition implements RulesDefinition {
 
     public void define(Context context) {
         NewRepository repository = context
-                .createRepository(RULE_REPOSITORY_KEY, JAVASCRIPT)
+                .createRepository(RULE_REPOSITORY_KEY, CSHARP)
                 .setName(REPOSITORY_NAME);
 
         repository.createRule(SURVIVED_MUTANT_RULE_KEY)
-                .setName("Mutant survived")
+                .setName("MutantResult survived")
                 .setSeverity(Severity.MINOR)
                 .addTags("mutant")
                 .setType(RuleType.CODE_SMELL)
@@ -46,7 +46,7 @@ public class StrykerRulesDefinition implements RulesDefinition {
                         STRYKER_LOGO_HTML);
 
         repository.createRule(NO_COVERAGE_MUTANT_RULE_KEY)
-                .setName("Mutant not covered")
+                .setName("MutantResult not covered")
                 .setSeverity(Severity.MINOR)
                 .addTags("mutant")
                 .setType(RuleType.CODE_SMELL)

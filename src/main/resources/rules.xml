@@ -1,8 +1,8 @@
 <rules>
     <rule>
-        <key>stryker.mutant.survived</key>
+        <key>stryker.mutantResult.survived</key>
         <name>Mutant Survived</name>
-        <internalKey>stryker.mutant.survived</internalKey>
+        <internalKey>stryker.mutantResult.survived</internalKey>
         <description>This is an example of rule defined thru the XML.
         </description>
         <severity>BLOCKER</severity>

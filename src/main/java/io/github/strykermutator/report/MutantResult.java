@@ -1,15 +1,16 @@
 package io.github.strykermutator.report;
 
+import lombok.Builder;
+import lombok.Getter;
 import lombok.Value;
 
-import java.util.List;
-
 @Value
+@Getter
+@Builder
 public class MutantResult {
-    private String fileName;
-    private String mutatorName;
-    private MutantStatus status;
-    private String replacement;
-    private Location location;
-    private List<Integer> range;
+    String mutatorName;
+    String replacement;
+    Location location;
+    MutantStatus status;
+    String fileName;
 }

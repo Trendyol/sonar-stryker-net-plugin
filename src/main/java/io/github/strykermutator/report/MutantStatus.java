@@ -1,27 +1,19 @@
 package io.github.strykermutator.report;
 
-import com.google.gson.annotations.JsonAdapter;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@JsonAdapter(MutantStatusAdapter.class)
 @Getter
+@AllArgsConstructor
 public enum MutantStatus {
-    NO_COVERAGE(0, "no coverage"),
-    KILLED(1, "killed"),
-    SURVIVED(2, "survived"),
-    TIMED_OUT(3, "timed out"),
-    ERROR(4, "error");
+    NOT_RUN("NotRun"),
+    KILLED("Killed"),
+    SURVIVED("Survived"),
+    TIMEOUT("Timeout"),
+    COMPILE_ERROR("CompileError"),
+    IGNORED("Ignored"),
+    NO_COVERAGE("NoCoverage");
 
-    private int value;
-    private String stringRepresentation;
+    private final String value;
 
-    MutantStatus(int value, String stringRepresentation) {
-        this.value = value;
-        this.stringRepresentation = stringRepresentation;
-    }
-
-    @Override
-    public String toString() {
-        return stringRepresentation;
-    }
 }
