@@ -62,7 +62,6 @@ public class StrykerEventsDirectory {
         Stream<File> sortedFolderList = Arrays.stream(reportFolders)
                 .filter(f -> f.getName().matches(REPORT_FOLDER_REGEX))
                 .sorted((f1, f2) ->
-                        //TODO: BURADA EN ESKİ DOSYAYI GETİRİYOR, TAM TERSİ OLMALI!
                         (int) (f2.lastModified() - f1.lastModified()));
         //TODO: last modified'a değil, folder adındaki date'e göre filtrele.
 
