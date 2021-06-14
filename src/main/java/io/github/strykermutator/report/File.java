@@ -7,5 +7,5 @@ import java.util.List;
 
 @Value
 public class File {
-    List<MutantResult> mutants = new ArrayList<>();
+    List<Mutant> mutants = new ArrayList<>();
 }

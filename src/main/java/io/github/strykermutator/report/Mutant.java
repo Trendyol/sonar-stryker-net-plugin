@@ -7,7 +7,7 @@ import lombok.Value;
 @Value
 @Getter
 @Builder
-public class MutantResult {
+public class Mutant {
     String mutatorName;
     String replacement;
     Location location;

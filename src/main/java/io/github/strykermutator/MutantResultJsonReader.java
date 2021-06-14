@@ -4,7 +4,7 @@ package io.github.strykermutator;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import io.github.strykermutator.report.File;
-import io.github.strykermutator.report.MutantResult;
+import io.github.strykermutator.report.Mutant;
 import io.github.strykermutator.report.MutationReport;
 
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ class MutantResultJsonReader {
 
     private Gson gson = new Gson();
 
-    List<MutantResult> readMutants(String reportContent) {
+    List<Mutant> readMutants(String reportContent) {
         MutationReport mutationReport = gson.fromJson(reportContent, new TypeToken<MutationReport>() {
         }.getType());
 
@@ -23,18 +23,17 @@ class MutantResultJsonReader {
         //her dosyayı sırayla iterate et, her dosyada mutants arrayi empty ise atla,
         // değilse her bir mutant fileName'i bas ve mutant arrayine pushla
 
-        List<MutantResult> mutantsWithFileName = new ArrayList<>();
+        List<Mutant> mutantsWithFileName = new ArrayList<>();
         for (Map.Entry<String, File> entry : files.entrySet()) {
-            List<MutantResult> mutantResults = entry.getValue().getMutants();
-            //TODO: çalışıyor mu?
-            if (mutantResults == null || mutantResults.isEmpty()) continue;
-            for (MutantResult mutantResult : entry.getValue().getMutants()) {
+            List<Mutant> mutants = entry.getValue().getMutants();
+            if (mutants == null || mutants.isEmpty()) continue;
+            for (Mutant mutant : entry.getValue().getMutants()) {
                 mutantsWithFileName.add(
-                        MutantResult.builder()
-                                .location(mutantResult.getLocation())
-                                .mutatorName(mutantResult.getMutatorName())
-                                .replacement(mutantResult.getReplacement())
-                                .status(mutantResult.getStatus())
+                        Mutant.builder()
+                                .location(mutant.getLocation())
+                                .mutatorName(mutant.getMutatorName())
+                                .replacement(mutant.getReplacement())
+                                .status(mutant.getStatus())
                                 .fileName(String.format("%s/%s", mutationReport.getProjectRoot(), entry.getKey()))
                                 .build()
                 );
