@@ -85,8 +85,8 @@ public class RulesProcessor {
 
     private String makeRelativePath(String sourceFilePath, File baseDir) throws IOException {
         File sourceFile = new File(sourceFilePath);
-        //burası dosya yolundan-> /Users/mustafa.yumurtaci/workspace/trendyol/integrationinterface-service/src/Domain/Global/ConfigConstants.cs
-        // src/Domain/Global/ConfigConstants.cs'i dönüyor
+        // Users/mustafa.yumurtaci/workspace/trendyol/test-service/src/Domain/Global/ConfigConstants.cs to
+        // src/Domain/Global/ConfigConstants.cs
 
         if (sourceFile.getCanonicalPath().startsWith(baseDir.getCanonicalPath())) {
             sourceFilePath = sourceFile.getCanonicalPath().substring(baseDir.getCanonicalPath().length() + 1);
