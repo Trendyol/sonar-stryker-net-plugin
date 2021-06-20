@@ -21,7 +21,7 @@
 
     <organization>
         <name>Trendyol Group</name>
-        <url>http://www.trendyol.com</url>
+        <url>https://github.com/Trendyol</url>
     </organization>
 
     <properties>
@@ -115,7 +115,7 @@
                     <pluginKey>sonar-stryker-net-plugin</pluginKey>
                     <pluginClass>com.trendyol.sonar.stryker.net.SonarStrykerNetPlugin</pluginClass>
                     <pluginName>Stryker.NET Mutation Analysis</pluginName>
-                    <pluginDescription>Stryker .NET mutation analysis plugin for SonarQube</pluginDescription>
+                    <pluginDescription>Stryker.NET mutation analysis plugin for SonarQube</pluginDescription>
                     <basePlugin>csharp</basePlugin>
                 </configuration>
             </plugin>
