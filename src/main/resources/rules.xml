@@ -7,7 +7,7 @@
             <![CDATA[<h2>Survived mutant</h2>
 	       <p>A mutant of a class has not been killed although appearing to be covered by a test.</p>
 	       <p>
-	       For more information check out the <a href=\"https://stryker-mutator.github.io">Stryker documentation</a>
+	       For more information check out the <a href=\https://stryker-mutator.github.io>Stryker documentation</a>
 	       </p>
            ]]>
         </description>
@@ -25,7 +25,7 @@
             <![CDATA[<h2>Uncovered mutant</h2>
 	       <p>A mutant of a class has not been covered by a test at all.</p>
 	       <p>
-	       For more information check out the <a href=\"https://stryker-mutator.github.io">Stryker documentation</a>
+	       For more information check out the <a href=\https://stryker-mutator.github.io>Stryker documentation</a>
 	       </p>
            ]]>
         </description>

@@ -70,12 +70,12 @@ public class ReportParser {
 
         Optional<File> lastModifiedReportFolder = Arrays.stream(reportFolders)
                 .filter(f -> f.getName().matches(Constants.STRYKER_NET_REPORT_FOLDER_REGEX))
-                .sorted((f1, f2) -> {
-                    DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd.HH:mm:ss");
+                .max((f1, f2) -> {
+                    DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd.HH-mm-ss");
                     DateTime d1 = formatter.parseDateTime(f1.getName());
                     DateTime d2 = formatter.parseDateTime(f2.getName());
                     return d1.compareTo(d2);
-                }).findFirst();
+                });
 
 
         if (lastModifiedReportFolder.isPresent()) {
