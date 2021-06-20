@@ -27,7 +27,7 @@ However, it can be installed manually:
 
 ### Run Stryker.NET
 
-Next, setup Stryker.NET in your project. See [stryker-mutator.github.io](https://stryker-mutator.github.io). Make sure to enable the `'event-recorder'` reporter. 
+Next, setup Stryker.NET in your project. See [stryker-mutator.github.io](https://stryker-mutator.github.io). Make sure to enable the `'json'` reporter. 
 This will record all reporter events and write them to disk (`StrykerOutput/{analysis folder by date}/reports/mutation-report.json` by default). 
 Make sure that works before proceeding.
 
