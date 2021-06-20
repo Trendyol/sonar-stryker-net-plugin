@@ -37,6 +37,10 @@
         <joda.time.version>2.10.6</joda.time.version>
         <sonar.plugin.api.version>8.0</sonar.plugin.api.version>
 
+        <sonar.projectKey>Trendyol_sonar-stryker-net-plugin</sonar.projectKey>
+        <sonar.organization>trendyol</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+
     </properties>
 
     <dependencies>
