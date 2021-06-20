@@ -17,23 +17,20 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package io.github.strykermutator;
+package com.trendyol.sonar.stryker.net;
 
 import lombok.RequiredArgsConstructor;
-import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinitionXmlLoader;
 
-import static io.github.strykermutator.StrykerConstants.*;
-
 @RequiredArgsConstructor
-public class StrykerRulesDefinition implements RulesDefinition {
+public class SonarStrykerNetRulesDefinition implements org.sonar.api.server.rule.RulesDefinition {
 
     private final RulesDefinitionXmlLoader xmlLoader;
 
     public void define(Context context) {
         NewRepository repository = context
-                .createRepository(RULE_REPOSITORY_KEY, CSHARP)
-                .setName(REPOSITORY_NAME);
+                .createRepository(Constants.RULE_REPOSITORY_KEY, Constants.CSHARP)
+                .setName(Constants.RULE_REPOSITORY_NAME);
 
         this.xmlLoader.load(repository,
                 getClass().getClassLoader().getResourceAsStream("rules.xml"),

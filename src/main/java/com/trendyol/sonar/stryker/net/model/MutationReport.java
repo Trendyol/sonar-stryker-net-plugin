@@ -1,9 +1,8 @@
-package io.github.strykermutator.report;
+package com.trendyol.sonar.stryker.net.model;
 
 import lombok.Value;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Value
 public class MutationReport {

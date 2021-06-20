@@ -1,7 +1,7 @@
-package io.github.strykermutator;
+package com.trendyol.sonar.stryker.net;
 
-import io.github.strykermutator.report.Mutant;
-import io.github.strykermutator.report.MutantStatus;
+import com.trendyol.sonar.stryker.net.model.Mutant;
+import com.trendyol.sonar.stryker.net.model.MutantStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sonar.api.batch.fs.FilePredicate;
@@ -20,8 +20,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-import static io.github.strykermutator.StrykerConstants.*;
-
 @Slf4j
 @RequiredArgsConstructor
 public class RulesProcessor {
@@ -29,7 +27,7 @@ public class RulesProcessor {
     private final FileSystem fileSystem;
 
     public void processRules(SensorContext context, List<Mutant> mutants) throws IllegalStateException, IOException {
-        final Collection<ActiveRule> activeRules = this.rulesProfile.findByRepository(RULE_REPOSITORY_KEY);
+        final Collection<ActiveRule> activeRules = this.rulesProfile.findByRepository(Constants.RULE_REPOSITORY_KEY);
 
         if (activeRules.isEmpty()) {
             throw new IllegalStateException("At least one Mutation Analysis rule needs to be activated in the current profile.");
@@ -41,8 +39,8 @@ public class RulesProcessor {
     private void applyRules(List<Mutant> mutants, SensorContext context) throws IOException {
         log.info("Processing {} mutant(s).", mutants.size());
 
-        applyRule(mutants, context, MutantStatus.SURVIVED, SURVIVED_MUTANT_RULE_KEY);
-        applyRule(mutants, context, MutantStatus.NO_COVERAGE, NO_COVERAGE_MUTANT_RULE_KEY);
+        applyRule(mutants, context, MutantStatus.SURVIVED, Constants.SURVIVED_MUTANT_RULE_KEY);
+        applyRule(mutants, context, MutantStatus.NO_COVERAGE, Constants.NO_COVERAGE_MUTANT_RULE_KEY);
     }
 
     private void applyRule(List<Mutant> mutants, SensorContext context, MutantStatus targetStatus, String ruleKey) throws IOException {
@@ -54,7 +52,7 @@ public class RulesProcessor {
                 InputFile inputFile = locateSourceFile(mutant.getFileName());
 
                 NewIssue issue = context.newIssue()
-                        .forRule(RuleKey.of(RULE_REPOSITORY_KEY, ruleKey));
+                        .forRule(RuleKey.of(Constants.RULE_REPOSITORY_KEY, ruleKey));
 
                 NewIssueLocation location = issue.newLocation()
                         .on(inputFile)

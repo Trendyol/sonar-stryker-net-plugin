@@ -1,12 +1,11 @@
-package io.github.strykermutator.report;
+package com.trendyol.sonar.stryker.net.model;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Value;
+import lombok.*;
 
 @Value
 @Getter
 @Builder
+@Setter
 public class Mutant {
     String mutatorName;
     String replacement;

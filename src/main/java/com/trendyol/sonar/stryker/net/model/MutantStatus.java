@@ -1,4 +1,4 @@
-package io.github.strykermutator.report;
+package com.trendyol.sonar.stryker.net.model;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
