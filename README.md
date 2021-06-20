@@ -1,6 +1,6 @@
 # sonar-stryker-net-plugin
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Trendyol_sonar-stryker-net-plugin&metric=alert_status)](https://sonarcloud.io/dashboard?id=Trendyol_sonar-stryker-net-plugin)
+[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=Trendyol_sonar-stryker-net-plugin)](https://sonarcloud.io/dashboard?id=Trendyol_sonar-stryker-net-plugin)
 
 ## Getting started
 
