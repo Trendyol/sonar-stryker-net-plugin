@@ -7,7 +7,7 @@
 As of now the sonar-stryker-net-plugin is not distributed via any artifact repository. 
 However, it can be installed manually:
 
-### Install plugin in sonar qube
+### Install plugin to SonarQube
 
 1. Make sure you have git and maven installed locally. Make sure you have a running SonarQube server (or installed locally).
 2. Clone this repository
