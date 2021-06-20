@@ -1,4 +1,4 @@
-#sonar-stryker-net-plugin
+# sonar-stryker-net-plugin
 
 ## Getting started
 
