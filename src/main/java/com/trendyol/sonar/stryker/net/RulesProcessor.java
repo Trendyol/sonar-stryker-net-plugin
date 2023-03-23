@@ -49,7 +49,7 @@ public class RulesProcessor {
             final String status = mutant.getStatus().getValue();
             if (status.equals(targetStatus.getValue())) {
                 count++;
-                InputFile inputFile = locateSourceFile(mutant.getFileName());
+                InputFile inputFile = locateSourceFile(mutant.getAbsoluteFilePath());
 
                 NewIssue issue = context.newIssue()
                         .forRule(RuleKey.of(Constants.RULE_REPOSITORY_KEY, ruleKey));

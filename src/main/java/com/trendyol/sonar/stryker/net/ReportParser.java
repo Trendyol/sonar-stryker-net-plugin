@@ -99,20 +99,20 @@ public class ReportParser {
             if (Objects.isNull(mutants) || mutants.isEmpty()) continue;
             for (Mutant mutant : mutants) {
                 mutantsWithFileName.add(
-                        buildMutant(mutationReport.getProjectRoot(), entry.getKey(), mutant)
+                        buildMutant(entry.getKey(), mutant)
                 );
             }
         }
         return mutantsWithFileName;
     }
 
-    private Mutant buildMutant(final String projectRoot, final String filename, final Mutant mutant) {
+    private Mutant buildMutant(final String filePath, final Mutant mutant) {
         return Mutant.builder()
                 .location(mutant.getLocation())
                 .mutatorName(mutant.getMutatorName())
                 .replacement(mutant.getReplacement())
                 .status(mutant.getStatus())
-                .fileName(String.format("%s/%s", projectRoot, filename))
+                .absoluteFilePath(filePath)
                 .build();
     }
 }
