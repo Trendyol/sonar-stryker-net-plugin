@@ -1,7 +1,5 @@
 # sonar-stryker-net-plugin
 
-[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=Trendyol_sonar-stryker-net-plugin)](https://sonarcloud.io/dashboard?id=Trendyol_sonar-stryker-net-plugin)
-
 ## Getting started
 
 As of now the sonar-stryker-net-plugin is not distributed via any artifact repository. 
