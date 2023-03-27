@@ -25,4 +25,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: jar
-          path: .m2/repository/*.jar
+          path: .m2/repository/com/trendyol/sonar/stryker/net/sonar-stryker-net-plugin/**/*.jar
