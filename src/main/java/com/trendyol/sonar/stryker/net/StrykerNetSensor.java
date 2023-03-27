@@ -10,6 +10,9 @@ import org.sonar.api.scanner.sensor.ProjectSensor;
 
 import java.util.List;
 
+import static com.trendyol.sonar.stryker.net.Constants.CSHARP;
+import static com.trendyol.sonar.stryker.net.Constants.RULE_REPOSITORY_KEY;
+
 @Slf4j
 public class StrykerNetSensor implements ProjectSensor {
 
@@ -24,6 +27,8 @@ public class StrykerNetSensor implements ProjectSensor {
     @Override
     public void describe(SensorDescriptor descriptor) {
         descriptor.name("Stryker.NET Mutation Analysis");
+        descriptor.onlyOnLanguage(CSHARP);
+        descriptor.createIssuesForRuleRepository(RULE_REPOSITORY_KEY);
     }
 
 
