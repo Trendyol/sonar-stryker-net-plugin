@@ -120,6 +120,13 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>3.0.0-M6</version>
+                <configuration>
+                    <scmCommentPrefix>[ci skip]</scmCommentPrefix>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <scm>
@@ -128,5 +135,4 @@
         <url>git@github.com:Trendyol/sonar-stryker-net-plugin.git</url>
         <tag>HEAD</tag>
     </scm>
-
 </project>
