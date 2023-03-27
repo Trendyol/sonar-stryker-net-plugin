@@ -130,8 +130,8 @@
         </plugins>
     </build>
     <scm>
-        <connection>scm:git:${project.scm.url}</connection>
-        <developerConnection>scm:git:${project.scm.url}</developerConnection>
+        <connection>scm:git:https://github.com/Trendyol/sonar-stryker-net-plugin.git</connection>
+        <developerConnection>scm:git:https://github.com/Trendyol/sonar-stryker-net-plugin.git</developerConnection>
         <url>git@github.com:Trendyol/sonar-stryker-net-plugin.git</url>
         <tag>HEAD</tag>
     </scm>
