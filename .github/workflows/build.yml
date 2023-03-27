@@ -1,6 +1,18 @@
-- name: Java Maven release
-  uses: qcastel/github-actions-maven-release@v1.12.31
-  env:
-    JAVA_HOME: /usr/lib/jvm/java-11-openjdk/
-  with:
-    ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+name: Build & Release
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  build:
+    name: Build & Release
+    runs-on: ubuntu-latest
+    steps:
+     - name: Java Maven release
+       uses: qcastel/github-actions-maven-release@v1.12.31
+       env:
+         JAVA_HOME: /usr/lib/jvm/java-11-openjdk/
+       with:
+         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
