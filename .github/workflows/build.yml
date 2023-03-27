@@ -1,18 +1,21 @@
-name: Build & Release
+name: release version
 on:
   push:
     branches:
       - master
-  pull_request:
-    types: [opened, synchronize, reopened]
 jobs:
   build:
-    name: Build & Release
     runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
-     - name: Java Maven release
-       uses: qcastel/github-actions-maven-release@v1.12.31
-       env:
-         JAVA_HOME: /usr/lib/jvm/java-11-openjdk/
-       with:
-         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Build and Test
+        uses: qcastel/github-actions-maven-cmd@master
+        with:
+          maven-args: "clean install -Ddockerfile.skip -DdockerCompose.skip -Djib.skip"
+      - name: Release
+        uses: qcastel/github-actions-maven-release@master
+        with:
+          git-release-bot-name: "bot-idhub"
+          git-release-bot-email: "bot@idhub.io"
+          maven-args: "-Dmaven.javadoc.skip=true -DskipTests -DskipITs -Ddockerfile.skip -DdockerCompose.skip -Dmaven.deploy.skip=true"
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
