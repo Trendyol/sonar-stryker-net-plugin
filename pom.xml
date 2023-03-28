@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.trendyol.sonar.stryker.net</groupId>
@@ -103,8 +104,12 @@
                 <version>1.18.0.372</version>
                 <extensions>true</extensions>
                 <configuration>
-                    <!-- the entry-point class that extends org.sonar.api.SonarPlugin -->
+                    <finalName>sonar-stryker-net-plugin</finalName>
+                    <pluginKey>sonar-stryker-net-plugin</pluginKey>
                     <pluginClass>com.trendyol.sonar.stryker.net.SonarStrykerNetPlugin</pluginClass>
+                    <pluginName>Stryker.NET Mutation Analysis</pluginName>
+                    <pluginDescription>Stryker.NET mutation analysis plugin for SonarQube</pluginDescription>
+                    <basePlugin>csharp</basePlugin>
                 </configuration>
             </plugin>
             <plugin>
