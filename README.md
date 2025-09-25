@@ -1,3 +1,5 @@
+
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/Trendyol/sonar-stryker-net-plugin/badge)](https://scorecard.dev/viewer/?uri=github.com/Trendyol/sonar-stryker-net-plugin)
 # sonar-stryker-net-plugin
 
 ## Getting started
